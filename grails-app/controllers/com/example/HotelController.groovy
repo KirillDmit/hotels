@@ -5,65 +5,56 @@ import grails.gorm.transactions.Transactional
 
 class HotelController {
 
+    HotelService hotelService
+    CountryService countryService
+
     def index() {
-        def hotels = Hotel.list()
+        def hotels = hotelService.listAllHotels()
         render(view: 'list', model: [hotels: hotels])
     }
 
-    @Transactional
     def create() {
+        def countries = countryService.listAllCountries()
         if (request.method == 'POST') {
             def hotel = new Hotel(params)
-            if (hotel.save(flush: true)) {
+            if (hotelService.saveHotel(params)) {
                 flash.message = "Отель успешно добавлен."
                 redirect(action: 'index')
             } else {
-                render(view: 'create', model: [hotel: hotel])
+                render(view: 'create', model: [countries: countries, hotel: hotel])
             }
         } else {
-            def countries = Country.list()
             render(view: 'create', model: [countries: countries])
         }
     }
 
-    @Transactional
     def edit(Long id) {
-        def hotel = Hotel.get(id)
+        def hotel = hotelService.getHotelById(id)
         if (!hotel) {
             flash.message = "Отель не найден."
             redirect(action: 'index')
             return
         }
 
+        def countries = countryService.listAllCountries()
         if (request.method == 'POST') {
-            hotel.properties = params
-            if (hotel.save(flush: true)) {
+            if (hotelService.updateHotel(hotel, params)) {
                 flash.message = "Отель успешно обновлен."
                 redirect(action: 'index')
             } else {
-                render(view: 'edit', model: [hotel: hotel])
+                render(view: 'edit', model: [hotel: hotel, countries: countries])
             }
         } else {
-            def countries = Country.list()
             render(view: 'edit', model: [hotel: hotel, countries: countries])
         }
     }
 
-    @Transactional
     def delete(Long id) {
-        def hotel = Hotel.get(id)
-        if (!hotel) {
-            flash.message = "Отель не найден."
-            redirect(action: 'index')
-            return
-        }
-
-        if (request.method == 'POST') {
-            hotel.delete(flush: true)
+        if (hotelService.deleteHotel(id)) {
             flash.message = "Отель успешно удален."
-            redirect(action: 'index')
         } else {
-            render(view: 'delete', model: [hotel: hotel])
+            flash.message = "Отель не найден."
         }
+        redirect(action: 'index')
     }
 }

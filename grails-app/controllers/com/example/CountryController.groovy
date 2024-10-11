@@ -3,29 +3,29 @@ package com.example
 import grails.gorm.transactions.Transactional
 
 class CountryController {
+
+    CountryService countryService
+
     def index() {
-        def countries = Country.list()
+        def countries = countryService.listAllCountries()
         render(view: 'list', model: [countries: countries])
     }
 
-    @Transactional
     def create() {
         if (request.method == 'POST') {
-            def country = new Country(params)
-            if (country.save(flush: true)) {
+            if (countryService.saveCountry(params)) {
                 flash.message = "Страна успешно добавлена."
                 redirect(action: 'index')
             } else {
-                render(view: 'create', model: [country: country])
+                render(view: 'create')
             }
         } else {
             render(view: 'create')
         }
     }
 
-    @Transactional
     def edit(Long id) {
-        def country = Country.get(id)
+        def country = countryService.getCountryById(id)
         if (!country) {
             flash.message = "Страна не найдена."
             redirect(action: 'index')
@@ -33,8 +33,7 @@ class CountryController {
         }
 
         if (request.method == 'POST') {
-            country.properties = params
-            if (country.save(flush: true)) {
+            if (countryService.updateCountry(country, params)) {
                 flash.message = "Страна успешно обновлена."
                 redirect(action: 'index')
             } else {
@@ -45,11 +44,8 @@ class CountryController {
         }
     }
 
-    @Transactional
     def delete(Long id) {
-        def country = Country.get(id)
-        if (country) {
-            country.delete(flush: true)
+        if (countryService.deleteCountry(id)) {
             flash.message = "Страна успешно удалена."
         } else {
             flash.message = "Страна не найдена."
