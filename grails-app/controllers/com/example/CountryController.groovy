@@ -1,14 +1,15 @@
 package com.example
 
-import grails.gorm.transactions.Transactional
-
 class CountryController {
 
     CountryService countryService
 
-    def index() {
-        def countries = countryService.listAllCountries()
-        render(view: 'list', model: [countries: countries])
+    def index(Integer max, Integer offset) {
+        params.max = Math.min(max ?: 5, 50)
+        params.offset = offset ?: 0
+        def countries = countryService.listCountries(params)
+        def total = countryService.countCountries()
+        render(view: 'list', model: [countries: countries, total: total])
     }
 
     def create() {

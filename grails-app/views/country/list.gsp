@@ -29,5 +29,8 @@
 </table>
 
 <g:link action="create">Добавить страну</g:link>
+<div class="pagination">
+    <g:paginate total="${total}" />
+</div>
 </body>
 </html>

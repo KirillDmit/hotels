@@ -1,16 +1,16 @@
 package com.example
 
-import com.example.Country
-import grails.gorm.transactions.Transactional
-
 class HotelController {
 
     HotelService hotelService
     CountryService countryService
 
-    def index() {
-        def hotels = hotelService.listAllHotels()
-        render(view: 'list', model: [hotels: hotels])
+    def index(Integer max, Integer offset) {
+        params.max = Math.min(max ?: 5, 50)
+        params.offset = offset ?: 0
+        def hotels = hotelService.listHotels(params)
+        def total = hotelService.countHotels()
+        render(view: 'list', model: [hotels: hotels, total: total])
     }
 
     def create() {

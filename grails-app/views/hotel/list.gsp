@@ -20,7 +20,7 @@
         <g:each in="${hotels}" var="hotel">
             <tr>
                 <td>${hotel.name}</td>
-                <td>${hotel.country.name}</td>
+                <td>${hotel.country?.name}</td>
                 <td>${hotel.stars}</td>
                 <td>
                     <g:link action="edit" id="${hotel.id}">Редактировать</g:link>
@@ -32,6 +32,8 @@
 </table>
 
 <g:link action="create">Добавить отель</g:link>
-
+<div class="pagination">
+    <g:paginate total="${total}" />
+</div>
 </body>
 </html>

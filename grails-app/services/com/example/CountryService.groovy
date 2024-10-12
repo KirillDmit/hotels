@@ -9,6 +9,14 @@ class CountryService {
         return Country.list()
     }
 
+    def listCountries(Map params) {
+        return Country.list(params)
+    }
+
+    def countCountries() {
+        return Country.count()
+    }
+
     def getCountryById(Long id) {
         return Country.get(id)
     }
