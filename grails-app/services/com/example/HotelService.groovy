@@ -5,8 +5,16 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class HotelService {
 
-    def listAllHotels() {
+    def getAllHotels() {
         return Hotel.list()
+    }
+
+    def listHotels(Map params) {
+        return Hotel.list(params)
+    }
+
+    def countHotels() {
+        return Hotel.count()
     }
 
     def getHotelById(Long id) {
@@ -34,5 +42,52 @@ class HotelService {
             return true
         }
         return false
+    }
+
+    Hotel findHotelByName(String name) {
+        return Hotel.findByName(name)
+    }
+
+    List<Hotel> findHotelsByCountry(String countryName) {
+        return Hotel.createCriteria().list {
+            country {
+                eq("name", countryName)
+            }
+        }
+    }
+
+    Hotel findHotelByNameAndCountry(String hotelName, String countryName) {
+        return Hotel.createCriteria().get {
+            eq("name", hotelName)
+            country {
+                eq("name", countryName)
+            }
+        }
+    }
+
+    def searchHotels(String searchTerm, Long countryId, Map params) {
+        def criteria = Hotel.createCriteria()
+        return criteria.list(params) {
+            if (searchTerm) {
+                ilike('name', "%${searchTerm}%")
+            }
+            if (countryId) {
+                eq('country.id', countryId)
+            }
+            order('stars', 'desc')
+            order('name', 'asc')
+        }
+    }
+
+    def countHotelsBySearch(String searchTerm, Long countryId) {
+        def criteria = Hotel.createCriteria()
+        return criteria.count {
+            if (searchTerm) {
+                ilike('name', "%${searchTerm}%")
+            }
+            if (countryId) {
+                eq('country.id', countryId)
+            }
+        }
     }
 }
