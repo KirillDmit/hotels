@@ -12,7 +12,7 @@
 </g:if>
 
 <g:else>
-    <p>Найдено отелей: ${hotels.size()}</p>
+    <p>Найдено отелей: ${total}</p>
     <table border="1">
         <thead>
             <tr>
@@ -35,6 +35,9 @@
         </tbody>
     </table>
 </g:else>
+<div class="pagination">
+    <g:paginate total="${total}" />
+</div>
 <g:link action="index">Новый поиск</g:link>
 </body>
 </html>
