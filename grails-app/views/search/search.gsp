@@ -6,12 +6,12 @@
 </head>
 <body>
 <h1>Поиск отелей</h1>
-<g:form action="find">
-    <label for="hotelName">Название отеля:</label>
-    <g:textField name="hotelName" />
+<g:form action="search" method="GET">
+    <label for="searchTerm">Название отеля:</label>
+    <g:textField name="searchTerm" value="${searchTerm}" />
 
     <label for="country">Страна:</label>
-    <g:select name="countryId" from="${countries}" optionKey="id" optionValue="name" noSelection="['':'Все страны']" />
+    <g:select name="country.id" from="${countries}" optionKey="id" optionValue="name" value="${countryId}" noSelection="['':'Все страны']" />
 
     <g:submitButton name="search" value="Найти"/>
 </g:form>
