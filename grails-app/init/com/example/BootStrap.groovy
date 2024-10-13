@@ -10,6 +10,7 @@ class BootStrap {
         def usa = new Country(name: 'США', capital: 'Вашингтон').save(failOnError: true)
         def germany = new Country(name: 'Германия', capital: 'Берлин').save(failOnError: true)
 
+        new Country(name: 'Франция', capital: 'Париж').save(failOnError: true)
         new Hotel(name: 'Звезды Арбата', country: russia, stars: 5, website: 'https://arbatstars.activhotels.ru/').save(failOnError: true)
         new Hotel(name: 'Отель Санкт-Петербург', country: russia, stars: 4).save(failOnError: true)
         new Hotel(name: 'New York Hotel', country: usa, stars: 5, website: 'https://newyorkhotel.com').save(failOnError: true)

@@ -33,6 +33,8 @@ dependencies {
     implementation("org.grails:grails-web-boot")
     implementation("org.grails.plugins:gsp")
     implementation("org.grails.plugins:hibernate5")
+    implementation("org.grails.plugins:hibernate5:7.3.0")
+    implementation("org.grails:grails-datastore-gorm-hibernate5:7.3.0")
     implementation("org.grails.plugins:scaffolding")
     implementation("org.springframework.boot:spring-boot-autoconfigure")
     implementation("org.springframework.boot:spring-boot-starter")
@@ -41,21 +43,33 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-tomcat")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     compileOnly("io.micronaut:micronaut-inject-groovy")
+    implementation("org.grails:grails-datastore-gorm")
     console("org.grails:grails-console")
     runtimeOnly("com.bertramlabs.plugins:asset-pipeline-grails:4.3.0")
     runtimeOnly("com.h2database:h2")
+    runtimeOnly('org.hsqldb:hsqldb:2.7.1')
     runtimeOnly("org.apache.tomcat:tomcat-jdbc")
     runtimeOnly("org.fusesource.jansi:jansi:1.18")
     testImplementation("io.micronaut:micronaut-inject-groovy")
     testImplementation("org.grails:grails-gorm-testing-support")
+    testImplementation("org.grails:grails-testing-support")
     testImplementation("org.grails:grails-web-testing-support")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.3")
     testImplementation("io.micronaut:micronaut-http-client")
-
+    testImplementation("org.spockframework:spock-core:2.0-groovy-3.0")
+    testImplementation("org.grails:grails-gorm-testing-support:2.2.0")
 }
 
 application {
     mainClass.set("com.example.Application")
+}
+
+test {
+    useJUnitPlatform()
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
 }
 
 java {
