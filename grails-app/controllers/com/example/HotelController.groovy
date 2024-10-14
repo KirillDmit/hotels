@@ -50,11 +50,18 @@ class HotelController {
     }
 
     def delete(Long id) {
-        if (hotelService.deleteHotel(id)) {
-            flash.message = "Отель успешно удален."
-        } else {
+        def hotel = hotelService.getHotelById(id)
+        if(!hotel){
             flash.message = "Отель не найден."
+            redirect(action: 'index')
+            return
         }
-        redirect(action: 'index')
+        if (request.method == 'POST') {
+            hotelService.deleteHotel(id)
+            flash.message = "Отель успешно удален."
+            redirect(action: 'index')
+        } else {
+            render(view: 'delete', model: [hotel: hotel])
+        }
     }
 }
